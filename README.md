@@ -1,14 +1,23 @@
-# Python SDK for Azure Cosmos DB
 
-This repository contains the followings:
+<p align="center">
+  <img src="https://jixjiastorage.blob.core.windows.net/blog-resources/cosmos-sdk-for-python/title.jpg">
+</p>
 
-1. Object classess for performing common CRUD operations
-2. A sample driver program that uses this SDK
+## Python Utility for Azure Cosmos DB
+This utility is designed to streamline interactign with Azure Cosmos DB using Python. T repo contains he following features:
 
-# Installation
+1. Classes for supporting common CRUD operations
+2. Sample driver program showcase how to use this SDK
 
-1. Clone this repo
-2. Fetch azure-cosmosdb sdk 3.3.1 `pip install -r requirements.txt`
-3. Add your Cosmos DB Endpoint and Primary Key to `cosmosdb_credential.py` file
-4. Run the example driver program `python program.py`  
-  - This will create a new Cosmos DB entity and a container with several sample items
+
+## How-To
+
+1. `git clone` this repo
+2. Install dependencies executing `pip install -r requirements.txt`
+3. Add your *Cosmos DB Endpoint* and *Primary Key* to `cosmosdb_credential.py` file
+4. Run driver program `python program.py` to see this utility in action. It perform the followings:
+    - create a new Cosmos database 
+    - create a new entity and container 
+    - add several several sample data into it
+    - query the container using SQL API
+    - delete designated items
