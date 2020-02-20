@@ -12,6 +12,7 @@ It contains following features:
 
 from cosmosdb_sdk import CosmosDB
 import uuid
+import json
 import datetime
 import random
 import colorama
@@ -48,7 +49,7 @@ if __name__ == "__main__":
     # (1) Instantiate database & container connection
     cosmosDBName = 'Demo_DB'
     containerName = 'Demo_Container'
-    print(Fore.CYAN + '[DEMO 1] Instantiating the Cosmos DB entity {} : {}'.format(
+    print(Fore.CYAN + '[INFO] Instantiating the Cosmos DB entity {} : {}'.format(
         cosmosDBName, containerName) + Style.RESET_ALL)
 
     dbConnection = CosmosDB(cosmosDBName, containerName)
@@ -60,19 +61,19 @@ if __name__ == "__main__":
     for i in range(15):
         dbConnection.create_item(generateData())
 
-    # (3) List all existing items in a container
-    print(Fore.CYAN + '[DEMO 3] Listing all existing items' + Style.RESET_ALL)
+    (3) List all existing items in a container
+    print(Fore.CYAN + '[INFO] Listing all existing items' + Style.RESET_ALL)
 
     itemList = dbConnection.list_items()
     for item in itemList:
-        print(item)
+        print(json.dumps(item, indent=2, sort_keys=True))
 
     # (4) Update selected item's property using custom query
     # For example, select items who's category is 'Deep Learning' and
     # update their version to '2.0'
-    print(Fore.CYAN + '[DEMO 4] Updating selected items' + Style.RESET_ALL)
+    print(Fore.CYAN + '[INFO] Updating selected items' + Style.RESET_ALL)
 
-    query = 'SELECT * FROM c WHERE c.partitionKey = "Deep Learning"'
+    query = 'SELECT * FROM c WHERE c.partitionKey = "Deep Learning" and c.view_count > 20'
     results = dbConnection.query_item(query)
 
     for item in results:
