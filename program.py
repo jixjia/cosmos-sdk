@@ -56,12 +56,12 @@ if __name__ == "__main__":
 
     # (2) Insert sample data into the Database container
     print(Fore.CYAN +
-          '[DEMO 2] Adding some sample data into Cosmos DB container' + Style.RESET_ALL)
+          '[INFO] Adding some sample data into Cosmos DB container' + Style.RESET_ALL)
 
     for i in range(15):
         dbConnection.create_item(generateData())
 
-    (3) List all existing items in a container
+    # (3) List all existing items in a container
     print(Fore.CYAN + '[INFO] Listing all existing items' + Style.RESET_ALL)
 
     itemList = dbConnection.list_items()
@@ -92,7 +92,7 @@ if __name__ == "__main__":
 
     # (5) Delete selected items
     # For example, remove items who's view count is less than 10
-    print(Fore.CYAN + '[DEMO 5] Deleting selected items' + Style.RESET_ALL)
+    print(Fore.CYAN + '[INFO] Deleting selected items' + Style.RESET_ALL)
 
     query = 'SELECT * FROM c WHERE c.view_count < 10'
     results = dbConnection.query_item(query)
