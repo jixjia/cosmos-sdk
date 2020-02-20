@@ -13,9 +13,16 @@ This utility is designed to streamline interactign with Azure Cosmos DB using Py
 ## How-To
 
 1. Clone this repo `git clone https://github.com/jixjia/cosmos-sdk.git` 
-2. Install dependencies executing `pip install -r requirements.txt`
-3. Add your *Cosmos DB Endpoint* and *Primary Key* to `cosmosdb_credential.py` file
-4. Run driver program `python program.py` to see this utility in action. It perform the followings:
+2. Install dependencies with `pip install -r requirements.txt`
+3. Add your **Cosmos DB Endpoint** and **Primary Key** to `cosmosdb_credential.py` file under section:
+```python
+# Cosmos DB config
+cosmosdb_config = {
+    'ENDPOINT': '<YOUR_COSMOS_ENDPOINT>',
+    'PRIMARYKEY': '<YOUR_PRIMARY_KEY>'
+}
+```
+4. Run driver program `python program.py` to for a demo of this utility. It will perform the followings:
     - create a new Cosmos database 
     - create a new entity and container 
     - add several several sample data into it
