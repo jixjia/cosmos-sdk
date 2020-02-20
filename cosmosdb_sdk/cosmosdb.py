@@ -1,3 +1,15 @@
+'''
+Author:         Jixin Jia (Gin)
+Date:           20-Jan-2020
+Version:        1.0
+
+This utility is designed to streamline interactign with Azure Cosmos DB using Python. 
+It contains following features:
+
+(1) Classes for supporting common CRUD operations
+(2) Sample driver program showcasing how to use this SDK
+'''
+
 import azure.cosmos.cosmos_client as cosmos_client
 import azure.cosmos.errors as errors
 from .cosmos_credential import cosmosdb_config
@@ -14,9 +26,9 @@ class CosmosDB():
             auth={'masterKey': cosmosdb_config['PRIMARYKEY']}
         )
 
-        ''' IMPORTANT
-        This utility will CREATE A NEW database and container specified in the cosmosdb_config
-        IF they DO NOT already exists.
+        '''
+        This utility will create the specified database and container 
+        if they don't exist already
         '''
 
         # Define database link
@@ -24,6 +36,7 @@ class CosmosDB():
         try:
             db = self.client.ReadDatabase(self.database_link)
             logger.info('Initiated DB ->', db)
+
         except errors.HTTPFailure as e:
             if e.status_code == 404:
                 print('The database \'{0}\' DOES NOT exist.'.format(
@@ -36,6 +49,7 @@ class CosmosDB():
 
             else:
                 raise errors.HTTPFailure(e.status_code)
+
         except Exception as e:
             raise e
 
@@ -61,6 +75,7 @@ class CosmosDB():
 
             else:
                 raise errors.HTTPFailure(e.status_code)
+
         except Exception as e:
             raise e
 
@@ -75,13 +90,14 @@ class CosmosDB():
     def create_database(self, database):
         try:
             return self.client.CreateDatabase({'id': database})
-            # database_link = db['_self']
+
         except errors.HTTPFailure as e:
             if e.status_code == 409:
                 print('[Info] A database with id \'{0}\' ALREADY exists'.format(
                     self.database_link))
             else:
                 raise errors.HTTPFailure(e.status_code)
+
         except Exception as e:
             raise e
 
@@ -137,16 +153,16 @@ class CosmosDB():
 
     # Create and add an item to the container
     def create_item(self, item):
-        query = {
-            'query': 'SELECT * FROM c WHERE c.id = "{0}"'.format(item['id'])
-        }
+        # query = {
+        #     'query': 'SELECT * FROM c WHERE c.id = "{0}"'.format(item['id'])
+        # }
 
         try:
-            self.client.CreateItem(self.container_link, item)
-            results = list(self.client.QueryItems(
-                self.container_link, query, self.default_options()))
-            print('[Info] Successfully created item')
-            return results
+            output = self.client.CreateItem(self.container_link, item)
+            # results = list(self.client.QueryItems(
+            #     self.container_link, query, self.default_options()))
+            print('[Info] Successfully created item {}'.format(item['id']))
+            return output
 
         except errors.HTTPFailure as e:
             if e.status_code == 404:
@@ -165,7 +181,7 @@ class CosmosDB():
         try:
             result = self.client.UpsertItem(
                 self.container_link, item, self.default_options())
-            print('[Info] Successfully updated item')
+            print('[Info] Successfully updated item {}'.format(item['id']))
             return result
         except errors.HTTPFailure as e:
             if e.status_code == 404:
@@ -223,10 +239,11 @@ class CosmosDB():
 
             for result in list(results):
                 options = self.default_options()
-                options['partitionKey'] = result['category']
+                options['partitionKey'] = result['partitionKey']
                 doc_link = self.container_link + '/docs/' + result['id']
-                outcome = self.client.DeleteItem(doc_link, options)
-            return outcome
+                output = self.client.DeleteItem(doc_link, options)
+                print('[Info] Successfully deleted item {}'.format(result['id']))
+            return output
 
         except errors.HTTPFailure as e:
             if e.status_code == 404:

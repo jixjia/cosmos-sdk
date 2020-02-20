@@ -1,53 +1,80 @@
+'''
+Author:         Jixin Jia (Gin)
+Date:           20-Jan-2020
+Version:        1.0
+
+This utility is designed to streamline interactign with Azure Cosmos DB using Python. 
+It contains following features:
+
+(1) Classes for supporting common CRUD operations
+(2) Sample driver program showcasing how to use this SDK
+'''
+
 from cosmosdb_sdk import CosmosDB
 import uuid
 import datetime
 import random
+import colorama
+from colorama import Style, Fore
+
+colorama.init()
+print(colorama.ansi.clear_screen())  # Clear terminal outputs
 
 
 def generateData():
-    sampleList = ['Big Data Platform', 'IoT Analytics',
-                  'Predictive Modelling', 'BI and Datawarehouse', 'Computer Vision', 'NLP']
+    category_list = ['Big Data Analytics', 'IoT Edge',
+                     'Predictive Modelling', 'BI and Data Visualization',
+                     'Image Processing (CV)', 'NLP', 'Deep Learning']
 
-    partitionKey = random.choice(sampleList)
+    category = random.choice(category_list)
 
     return {
         'id': str(uuid.uuid4()),
-        'partitionKey': partitionKey,
+        'partitionKey': category,
         'project': 'Project Cosmos SDK',
         'author': 'Jixin Jia',
-        'description': 'Python SDK for interacting with Cosmos',
+        'description': 'Python SDK for Azure Cosmos DB',
         'version': '1.0',
         'license': 'MIT',
-        'date': datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+        'view_count': random.randint(1, 30),
+        'timestamp': datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
     }
 
 
 if __name__ == "__main__":
 
-    # (0) Instantiate database & container connection
-    cosmosDBName = 'Cosmos_DB'
-    containerName = 'Cosmos_Container'
+    # DEMO
+
+    # (1) Instantiate database & container connection
+    cosmosDBName = 'Demo_DB'
+    containerName = 'Demo_Container'
+    print(Fore.CYAN + '[DEMO 1] Instantiating the Cosmos DB entity {} : {}'.format(
+        cosmosDBName, containerName) + Style.RESET_ALL)
+
     dbConnection = CosmosDB(cosmosDBName, containerName)
-    print('[INFO] Created new Cosmos DB entity {} : {}'.format(
-        cosmosDBName, containerName))
 
-    # (1) Insert sample data into the designated container
-    dbConnection.create_item(generateData())
-    dbConnection.create_item(generateData())
-    dbConnection.create_item(generateData())
+    # (2) Insert sample data into the Database container
+    print(Fore.CYAN +
+          '[DEMO 2] Adding some sample data into Cosmos DB container' + Style.RESET_ALL)
 
-    # (2) List all existing items in a container
+    for i in range(15):
+        dbConnection.create_item(generateData())
+
+    # (3) List all existing items in a container
+    print(Fore.CYAN + '[DEMO 3] Listing all existing items' + Style.RESET_ALL)
+
     itemList = dbConnection.list_items()
-
-    print('[INFO] Listing all existing items')
     for item in itemList:
         print(item)
 
-    # (3) Update an existing item using Custom Query (EXAMPLE: update 'version' from '1.0' to '2.0')
-    query = 'SELECT * FROM c WHERE c.author = "Jixin Jia"'
+    # (4) Update selected item's property using custom query
+    # For example, select items who's category is 'Deep Learning' and
+    # update their version to '2.0'
+    print(Fore.CYAN + '[DEMO 4] Updating selected items' + Style.RESET_ALL)
+
+    query = 'SELECT * FROM c WHERE c.partitionKey = "Deep Learning"'
     results = dbConnection.query_item(query)
 
-    print('[INFO] Updating data')
     for item in results:
         newData = {
             'id': item['id'],
@@ -57,11 +84,18 @@ if __name__ == "__main__":
             'description': item['description'],
             'version': '2.0',
             'license': item['license'],
-            'date': datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
+            'view_count': item['view_count'],
+            'timestamp': datetime.datetime.now().strftime('%Y/%m/%d %H:%M:%S')
         }
         dbConnection.upsert_item(newData)
 
-    # (4) Delete an existing item with document id
-    # document_id = generateData()['id']
-    # results = dbConnection.delete_item(document_id)
-    # print(results)
+    # (5) Delete selected items
+    # For example, remove items who's view count is less than 10
+    print(Fore.CYAN + '[DEMO 5] Deleting selected items' + Style.RESET_ALL)
+
+    query = 'SELECT * FROM c WHERE c.view_count < 10'
+    results = dbConnection.query_item(query)
+
+    for item in results:
+        document_id = item['id']
+        output = dbConnection.delete_item(document_id)
