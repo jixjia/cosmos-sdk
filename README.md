@@ -3,7 +3,7 @@
   <img src="https://jixjiastorage.blob.core.windows.net/blog-resources/cosmos-sdk-for-python/title.jpg">
 </p>
 
-## Python Utility for Azure Cosmos DB
+## Python SDK for Azure Cosmos DB
 This utility is designed to streamline interactign with Azure Cosmos DB using Python. T repo contains he following features:
 
 1. Classes for supporting common CRUD operations
