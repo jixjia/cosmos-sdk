@@ -4,7 +4,7 @@
 
 # Python SDK for Azure Cosmos DB
 
-This utility is designed to streamline interactign with Azure Cosmos DB using Python. The repo contains following features:
+I designed this utility to help simplify interacting with Azure Cosmos DB using Python. The repo contains following features:
 
 1. Classes for supporting common CRUD operations
 2. Sample driver program showing how to use this SDK
