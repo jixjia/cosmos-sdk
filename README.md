@@ -37,4 +37,8 @@ You can find credential information from the **Keys** section of your Cosmos DB 
    - Query items using SQL-like syntax (SQL API)
    - Delete selected items
 
-:warning: *You will need the CCosmos DB provisioned in order to run this DEMO program*
+:warning: *You will need the Cosmos DB provisioned in order to run this DEMO program*
+
+## Tutorial
+Refer to this [blog article](https://jixjia.com/python-sdk-for-cosmosdb/) for more examples of easy-to-use tutorials
+
